@@ -5,6 +5,10 @@
 [![CI](https://github.com/ModelGuardHQ-Tools/preview-locker-action/actions/workflows/ci.yml/badge.svg)](https://github.com/ModelGuardHQ-Tools/preview-locker-actionactions)
 [![License](https://img.shields.io/github/license/ModelGuardHQ-Tools/preview-locker-action)](LICENSE)
 
+[![Website](https://img.shields.io/website-up-down-green-red/http/previewlocker.dev.svg)](https://previewlocker.dev)
+[🚀 Get Started](https://previewlocker.dev) • [👀 Live Demo](https://previewlocker.dev/locker/checkout.php)
+
+
 > Secure your Netlify/Vercel/GitHub-Pages previews with time-limited links—zero infra, no leaks.
 
 ## 🚀 Quick Start
