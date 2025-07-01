@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/github/license/ModelGuardHQ-Tools/preview-locker-action)](LICENSE)
 
 [![Website](https://img.shields.io/website-up-down-green-red/http/previewlocker.dev.svg)](https://previewlocker.dev)
-[🚀 Get Started](https://previewlocker.dev) • [🚀 Get Started](https://previewlocker.dev) • [🛒 Try Checkout](https://previewlocker.dev/locker/checkout.php)
+[🚀 Get Started](https://previewlocker.dev) • [🛒 Try Checkout](https://previewlocker.dev/locker/checkout.php)
 
 **Ready to lock down your previews?**  
 
