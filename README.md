@@ -35,6 +35,106 @@ steps:
     run: echo "🔒 Preview: ${{ steps.lock.outputs.url }}"
 ```
 
+## Step-by-step: JavaScript GitHub Action entrypoint
+
+
+Below is a minimal guide to wire up your `preview-locker-action` using JavaScript + esbuild.
+
+---
+
+1️⃣ **Initialize your npm package**
+
+```bash
+cd path/to/preview-locker-action
+npm init -y
+```
+
+2️⃣ **Install runtime dependencies**
+
+```bash
+npm install @actions/core node-fetch@2
+```
+
+3️⃣ **Install bundler**
+
+```bash
+npm install --save-dev esbuild
+```
+
+4️⃣ **Create your source file** at `src/index.js`:
+
+```js
+import * as core from '@actions/core';
+import fetch from 'node-fetch';
+
+async function run() {
+  try {
+    const apiKey     = core.getInput('api_key', { required: true });
+    const previewUrl = core.getInput('preview_url', { required: true });
+    const expiresIn  = core.getInput('expires_in') || '3600';
+
+    const res = await fetch('https://previewlocker.dev/locker/issue.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        api_key: apiKey,
+        preview_url: previewUrl,
+        expires_in: expiresIn
+      })
+    });
+    if (!res.ok) throw new Error(`Issue failed: ${res.statusText}`);
+
+    const { token } = await res.json();
+    const lockedUrl = `https://previewlocker.dev/locker/r.php?token=${token}`;
+
+    core.setOutput('url', lockedUrl);
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+}
+
+run();
+```  
+
+5️⃣ **Add build script** to your `package.json`:
+
+```diff
+  "scripts": {
++   "build": "esbuild src/index.js --bundle --platform=node --target=node16 --outdir=dist"
+  }
+```
+
+6️⃣ **Update `action.yml`** to point at the bundled file:
+
+```yaml
+runs:
+  using: "node16"
+  main: "dist/index.js"
+```
+
+7️⃣ **Build & commit**
+
+```bash
+npm run build
+git add src/index.js dist/index.js package.json package-lock.json action.yml
+git commit -m "feat: implement JS entrypoint + build"
+git push
+```
+
+8️⃣ **Test locally** (optional)
+- Install [act](https://github.com/nektos/act)
+- Create a dummy workflow that calls your action with sample inputs.
+- `act push -P ubuntu-latest=nektos/act-environments-ubuntu:18.04`
+
+9️⃣ **Tag & publish** when you’re happy:
+
+```bash
+git tag v1.0.0
+git push --tags
+```  
+Then draft your release and publish on the Marketplace.
+
+
 ---
 
 ## 📥 Inputs
