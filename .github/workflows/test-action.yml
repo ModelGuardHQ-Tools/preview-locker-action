@@ -1,19 +1,33 @@
+# .github/workflows/test-action.yml
 name: Test Preview Locker Action
 on: [push]
 
 jobs:
   preview_test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install & build action
+        run: |
+          npm ci
+          npm run build
 
       - name: Invoke Preview Locker
         id: lock
         uses: ./
         with:
-          api_key: YOUR_TEST_API_KEY        # set a valid test key
-          preview_url: https://example.com  # any URL
+          api_key: ${{ secrets.PREVIEW_LOCKER_API_KEY }}  # add this in your repo Settings→Secrets
+          preview_url: https://example.com
           expires_in: 60
 
       - name: Show output
-        run: echo "Locked URL = ${{ steps.lock.outputs.url }}"
+        run: echo "🔒 Preview URL = ${{ steps.lock.outputs.url }}"
+
