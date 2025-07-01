@@ -1,10 +1,7 @@
-# preview-locker-action
-GitHub Action to lock down and time-limit static site previews
-
 # 🔒 Preview Locker Action
 
 [![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-Preview%20Locker-blue)](https://github.com/marketplace/actions/preview-locker)
-[![CI](https://github.com/your-org/preview-locker-action/actions/workflows/ci.yml/badge.svg)](https://github.com/ModelGuardHQ-Tools/preview-locker-actionactions)
+[![CI](https://github.com/ModelGuardHQ-Tools/preview-locker-action/actions/workflows/ci.yml/badge.svg)](https://github.com/ModelGuardHQ-Tools/preview-locker-actionactions)
 [![License](https://img.shields.io/github/license/ModelGuardHQ-Tools/preview-locker-action)](LICENSE)
 
 > Secure your Netlify/Vercel/GitHub-Pages previews with time-limited links—zero infra, no leaks.
