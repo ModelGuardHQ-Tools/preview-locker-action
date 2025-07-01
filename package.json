@@ -1,0 +1,20 @@
+{
+  "name": "preview-locker-action",
+  "version": "1.0.0",
+  "description": "[![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-Preview%20Locker-blue)](https://github.com/marketplace/actions/preview-locker)\r [![CI](https://github.com/ModelGuardHQ-Tools/preview-locker-action/actions/workflows/ci.yml/badge.svg)](https://github.com/ModelGuardHQ-Tools/preview-locker-actionactions)\r [![License](https://img.shields.io/github/license/ModelGuardHQ-Tools/preview-locker-action)](LICENSE)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild src/index.js --bundle --platform=node --target=node16 --outdir=dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.5"
+  }
+}

@@ -20,5 +20,5 @@ outputs:
   url:
     description: 'Signed URL that redirects to your preview for the TTL period'
 runs:
-  using: 'node12'
-  main: 'index.js'        # or point to your inline shell snippet
+  using: 'node16'
+  main: 'dist/index.js'        # or point to your inline shell snippet
