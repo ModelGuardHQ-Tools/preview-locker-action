@@ -29,7 +29,7 @@ steps:
     run: echo "🔒 Preview: ${{ steps.lock.outputs.url }}"
 
 
----
+
 
 ## 📥 Inputs
 
@@ -39,7 +39,7 @@ steps:
 | `preview_url` | URL of the static preview to lock               | —       |
 | `expires_in`  | Expiration time in seconds (max 86400 seconds)  | `3600`  |
 
----
+
 
 ## 📤 Outputs
 
@@ -47,7 +47,7 @@ steps:
 | ------ | -------------------------------------------- |
 | `url`  | The signed, expiring preview link (JWT URL)  |
 
----
+
 
 ## 💡 Why Preview Locker?
 
@@ -56,13 +56,13 @@ steps:
 - 🧩 **Easy integration**: works with any static host—Netlify, Vercel, GitHub Pages, S3, etc.  
 - 📊 **Compliance**: built-in auditing and quota management for regulated teams.
 
----
+
 
 ## 🔍 SEO & Keywords
 
 `preview`, `secure preview`, `static site`, `CI/CD`, `Netlify`, `Vercel`, `GitHub Action`, `time-limited link`
 
----
+
 
 ## 📝 License
 
