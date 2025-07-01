@@ -1,0 +1,23 @@
+name: 'Preview Locker'
+description: 'Generate secure, expiring preview URLs for your CI/CD previews'
+author: 'Edgardo Pinto-Escalier <you@example.com>'
+branding:
+  icon: 'lock'
+  color: 'blue'
+inputs:
+  api_key:
+    description: 'Your Preview Locker API key (from dashboard)'
+    required: true
+  preview_url:
+    description: 'The URL of the static preview to lock'
+    required: true
+  expires_in:
+    description: 'Time in seconds until the link expires (default: 3600)'
+    required: false
+    default: '3600'
+outputs:
+  url:
+    description: 'Signed URL that redirects to your preview for the TTL period'
+runs:
+  using: 'node12'
+  main: 'index.js'        # or point to your inline shell snippet
