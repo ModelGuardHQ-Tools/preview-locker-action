@@ -1,0 +1,19 @@
+name: Test Preview Locker Action
+on: [push]
+
+jobs:
+  preview_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Invoke Preview Locker
+        id: lock
+        uses: ./
+        with:
+          api_key: YOUR_TEST_API_KEY        # set a valid test key
+          preview_url: https://example.com  # any URL
+          expires_in: 60
+
+      - name: Show output
+        run: echo "Locked URL = ${{ steps.lock.outputs.url }}"
