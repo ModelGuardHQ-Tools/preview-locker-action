@@ -1,3 +1,4 @@
+---
 name: 'Preview Locker'
 description: 'Generate secure, expiring preview URLs for your CI/CD previews'
 author: 'Edgardo Pinto-Escalier <you@example.com>'
