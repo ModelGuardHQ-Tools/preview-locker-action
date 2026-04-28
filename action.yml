@@ -16,6 +16,13 @@ inputs:
     description: 'Time in seconds until the link expires (default: 3600)'
     required: false
     default: '3600'
+  comment_on_pr:
+    description: 'Post the locked preview link as a pull request comment'
+    required: false
+    default: 'false'
+  github_token:
+    description: 'GitHub token used to create or update the pull request comment'
+    required: false
 outputs:
   url:
     description: 'Signed URL that redirects to your preview for the TTL period'

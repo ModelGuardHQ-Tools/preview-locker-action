@@ -20,6 +20,7 @@ Preview Locker helps teams share staging and preview URLs with less accidental e
 - Exchanges that URL for a locked, expiring Preview Locker link.
 - Returns the locked URL as a GitHub Actions output.
 - Supports configurable expiration via `expires_in`.
+- Can optionally create or update a pull request comment with the locked preview link.
 
 ## Quick Start
 
@@ -54,12 +55,46 @@ jobs:
 | `api_key`     | Your Preview Locker API key                | Yes      | —       |
 | `preview_url` | The original preview URL to protect        | Yes      | —       |
 | `expires_in`  | Expiration time in seconds for the link    | No       | `3600`  |
+| `comment_on_pr` | Post the locked preview link as a pull request comment | No | `false` |
+| `github_token` | GitHub token used to create or update the pull request comment | No | — |
 
 ## Outputs
 
 | Output | Description                      |
 | ------ | -------------------------------- |
 | `url`  | The locked, expiring preview URL |
+
+## Comment on Pull Requests
+
+Use this workflow pattern when you want the action to post the locked preview link directly on a pull request. The action will update its latest PreviewLocker comment on repeated runs instead of creating duplicates.
+
+```yaml
+name: Preview Locker PR Comment
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  lock-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create locked preview link and comment on PR
+        id: lock
+        uses: ModelGuardHQ-Tools/preview-locker-action@v1
+        with:
+          api_key: ${{ secrets.PREVIEW_LOCKER_API_KEY }}
+          preview_url: https://preview.example.com/build-123
+          expires_in: 3600
+          comment_on_pr: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+```
 
 ## Security Model and Limitations
 
@@ -69,9 +104,9 @@ This improves how you share preview environments, but it does not automatically 
 
 ## Roadmap
 
-- PR security comments
 - Preview security checks
 - Fail-on-risk policy
+- Rich PR security reports
 
 ## License
 
