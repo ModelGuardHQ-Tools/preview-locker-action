@@ -21,7 +21,7 @@ inputs:
     required: false
     default: 'false'
   github_token:
-    description: 'GitHub token used to create or update the pull request comment'
+    description: 'Token used to create or update the PR comment'
     required: false
 outputs:
   url:
