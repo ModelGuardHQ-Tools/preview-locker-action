@@ -1,6 +1,6 @@
 ---
 name: 'PreviewLocker'
-description: 'Create locked, expiring sharing links for CI/CD preview environments'
+description: 'Create expiring locked links for CI/CD previews'
 author: 'PreviewLocker'
 branding:
   icon: 'lock'
@@ -25,7 +25,7 @@ inputs:
     required: false
 outputs:
   url:
-    description: 'Signed URL that redirects to your preview for the TTL period'
+    description: 'Locked preview URL'
 runs:
   using: 'node16'
   main: 'dist/index.js'
