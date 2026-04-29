@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Create locked preview link and comment
-        uses: ModelGuardHQ-Tools/preview-locker-action@main
+        uses: ModelGuardHQ-Tools/preview-locker-action@test-pr-comment-workflow
         with:
           api_key: ${{ secrets.PREVIEW_LOCKER_API_KEY }}
           preview_url: https://example.com
