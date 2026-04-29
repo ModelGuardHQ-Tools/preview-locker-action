@@ -1,0 +1,25 @@
+name: Test PreviewLocker Security Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  test-security-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create locked preview link, scan, and comment
+        uses: ModelGuardHQ-Tools/preview-locker-action@preview-security-checks-v1
+        with:
+          api_key: ${{ secrets.PREVIEW_LOCKER_API_KEY }}
+          preview_url: https://example.com
+          expires_in: 3600
+          comment_on_pr: true
+          scan_preview: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
