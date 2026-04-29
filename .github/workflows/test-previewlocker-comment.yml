@@ -1,0 +1,24 @@
+name: Test PreviewLocker PR Comment
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  test-comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create locked preview link and comment
+        uses: ModelGuardHQ-Tools/preview-locker-action@test-pr-comment-workflow
+        with:
+          api_key: ${{ secrets.PREVIEW_LOCKER_API_KEY }}
+          preview_url: https://example.com
+          expires_in: 3600
+          comment_on_pr: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
