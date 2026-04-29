@@ -21,6 +21,7 @@ Preview Locker helps teams share staging and preview URLs with less accidental e
 - Returns the locked URL as a GitHub Actions output.
 - Supports configurable expiration via `expires_in`.
 - Can optionally create or update a pull request comment with the locked preview link.
+- Can optionally run basic preview security checks and report findings.
 
 ## Quick Start
 
@@ -50,13 +51,15 @@ jobs:
 
 ## Inputs
 
-| Input         | Description                                | Required | Default |
-| ------------- | ------------------------------------------ | -------- | ------- |
-| `api_key`     | Your Preview Locker API key                | Yes      | —       |
-| `preview_url` | The original preview URL to protect        | Yes      | —       |
-| `expires_in`  | Expiration time in seconds for the link    | No       | `3600`  |
+| Input | Description | Required | Default |
+| ----- | ----------- | -------- | ------- |
+| `api_key` | Your Preview Locker API key | Yes | — |
+| `preview_url` | The original preview URL to protect | Yes | — |
+| `expires_in` | Expiration time in seconds for the link | No | `3600` |
 | `comment_on_pr` | Post the locked preview link as a pull request comment | No | `false` |
 | `github_token` | GitHub token used to create or update the pull request comment | No | — |
+| `scan_preview` | Run basic security checks against the preview URL | No | `false` |
+| `scan_timeout_ms` | Timeout for each preview security request | No | `5000` |
 
 ## Outputs
 
@@ -92,6 +95,50 @@ jobs:
           api_key: ${{ secrets.PREVIEW_LOCKER_API_KEY }}
           preview_url: https://preview.example.com/build-123
           expires_in: 3600
+          comment_on_pr: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+## Preview Security Checks
+
+Preview Security Checks V1 adds lightweight, best-effort checks against your preview URL and reports findings in the workflow logs. When used together with pull request comments, the action also appends a short "Preview checks" section to the PreviewLocker comment.
+
+V1 is informational only. It reports findings and unavailable checks, but it does not fail CI yet.
+
+Current V1 checks include:
+
+- HTTPS usage on the preview URL
+- Reachability and HTTP status
+- Final response URL after redirects when available
+- `X-Robots-Tag` presence with a `noindex` signal
+- `robots.txt` presence and whether it includes `Disallow: /`
+- Basic exposure probes for `/.env`, `/phpinfo.php`, `/debug`, and common source map paths
+
+```yaml
+name: Preview Locker PR Comment With Checks
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  lock-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create locked preview link, scan preview, and comment on PR
+        id: lock
+        uses: ModelGuardHQ-Tools/preview-locker-action@v1
+        with:
+          api_key: ${{ secrets.PREVIEW_LOCKER_API_KEY }}
+          preview_url: https://preview.example.com/build-123
+          expires_in: 3600
+          scan_preview: true
+          scan_timeout_ms: 5000
           comment_on_pr: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
 ```

@@ -23,6 +23,14 @@ inputs:
   github_token:
     description: 'Token used to create or update the PR comment'
     required: false
+  scan_preview:
+    description: 'Run basic preview URL checks'
+    required: false
+    default: 'false'
+  scan_timeout_ms:
+    description: 'Timeout for each preview check'
+    required: false
+    default: '5000'
 outputs:
   url:
     description: 'Locked preview URL'
