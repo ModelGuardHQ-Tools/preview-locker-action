@@ -9,7 +9,7 @@ async function run() {
     const expiresIn  = core.getInput('expires_in') || '3600';
     const commentOnPr = (core.getInput('comment_on_pr') || '').toLowerCase() === 'true';
 
-    const res = await fetch('https://previewlocker.dev/locker/issue.php', {
+    const res = await fetch('https://previewlocker.dev/issue.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
@@ -21,7 +21,7 @@ async function run() {
     if (!res.ok) throw new Error(`Issue failed: ${res.statusText}`);
 
     const { token } = await res.json();
-    const lockedUrl = `https://previewlocker.dev/locker/r.php?token=${token}`;
+    const lockedUrl = `https://previewlocker.dev/r.php?token=${token}`;
 
     core.setOutput('url', lockedUrl);
 
