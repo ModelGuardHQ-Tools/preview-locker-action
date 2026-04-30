@@ -60,6 +60,7 @@ jobs:
 | `github_token` | GitHub token used to create or update the pull request comment | No | — |
 | `scan_preview` | Run basic security checks against the preview URL | No | `false` |
 | `scan_timeout_ms` | Timeout for each preview security request | No | `5000` |
+| `fail_on_risk` | Fail workflow when preview checks warn | No | `false` |
 
 ## Outputs
 
@@ -104,6 +105,10 @@ Preview Security Checks V1 adds lightweight, best-effort checks against your pre
 
 V1 is informational only. It reports findings and unavailable checks, but it does not fail CI yet.
 
+You can optionally enable `fail_on_risk: true` to fail the workflow when any preview check returns a `warn` finding.
+
+Only `warn` findings fail the workflow. `info` findings, including unavailable checks, do not fail the workflow.
+
 Current V1 checks include:
 
 - HTTPS usage on the preview URL
@@ -141,6 +146,28 @@ jobs:
           scan_timeout_ms: 5000
           comment_on_pr: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+```yaml
+name: Preview Locker Fail On Risk
+
+on:
+  workflow_dispatch:
+
+jobs:
+  lock-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create locked preview link and fail on warnings
+        id: lock
+        uses: ModelGuardHQ-Tools/preview-locker-action@v1
+        with:
+          api_key: ${{ secrets.PREVIEW_LOCKER_API_KEY }}
+          preview_url: https://preview.example.com/build-123
+          scan_preview: true
+          fail_on_risk: true
 ```
 
 ## Security Model and Limitations

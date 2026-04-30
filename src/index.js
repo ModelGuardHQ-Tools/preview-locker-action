@@ -146,6 +146,16 @@ function formatSecurityReport(report) {
   return lines.join('\n');
 }
 
+function securityReportWarnings(report) {
+  if (!report || !Array.isArray(report.items)) {
+    return [];
+  }
+
+  return report.items
+    .filter((item) => item.status === 'warn')
+    .map((item) => item.label);
+}
+
 function buildPrCommentBody(lockedUrl, expiresIn, securityReportText) {
   const lines = [
     '🔒 PreviewLocker',
@@ -198,6 +208,7 @@ async function run() {
     const expiresIn  = core.getInput('expires_in') || '3600';
     const commentOnPr = isTrueInput('comment_on_pr');
     const scanPreview = isTrueInput('scan_preview');
+    const failOnRisk = isTrueInput('fail_on_risk');
     const parsedTimeout = parseInt(core.getInput('scan_timeout_ms') || '5000', 10);
     const scanTimeoutMs = Number.isFinite(parsedTimeout) && parsedTimeout > 0 ? parsedTimeout : 5000;
 
@@ -218,13 +229,18 @@ async function run() {
     core.setOutput('url', lockedUrl);
 
     let securityReportText = '';
+    let warningLabels = [];
     if (scanPreview) {
       const securityReport = await runPreviewSecurityChecks(previewUrl, scanTimeoutMs);
       securityReportText = formatSecurityReport(securityReport);
+      warningLabels = securityReportWarnings(securityReport);
       core.info(securityReportText);
     }
 
     if (!commentOnPr) {
+      if (scanPreview && failOnRisk && warningLabels.length > 0) {
+        throw new Error(`PreviewLocker found preview security warnings: ${warningLabels.join(', ')}`);
+      }
       return;
     }
 
@@ -249,6 +265,10 @@ async function run() {
     );
 
     await upsertPreviewLockerComment(octokit, owner, repo, issue_number, commentBody);
+
+    if (scanPreview && failOnRisk && warningLabels.length > 0) {
+      throw new Error(`PreviewLocker found preview security warnings: ${warningLabels.join(', ')}`);
+    }
   } catch (error) {
     core.setFailed(error.message);
   }

@@ -27024,6 +27024,12 @@ function formatSecurityReport(report) {
   }
   return lines.join("\n");
 }
+function securityReportWarnings(report) {
+  if (!report || !Array.isArray(report.items)) {
+    return [];
+  }
+  return report.items.filter((item) => item.status === "warn").map((item) => item.label);
+}
 function buildPrCommentBody(lockedUrl, expiresIn, securityReportText) {
   const lines = [
     "\u{1F512} PreviewLocker",
@@ -27068,6 +27074,7 @@ async function run() {
     const expiresIn = core.getInput("expires_in") || "3600";
     const commentOnPr = isTrueInput("comment_on_pr");
     const scanPreview = isTrueInput("scan_preview");
+    const failOnRisk = isTrueInput("fail_on_risk");
     const parsedTimeout = parseInt(core.getInput("scan_timeout_ms") || "5000", 10);
     const scanTimeoutMs = Number.isFinite(parsedTimeout) && parsedTimeout > 0 ? parsedTimeout : 5e3;
     const res = await (0, import_node_fetch.default)("https://previewlocker.dev/issue.php", {
@@ -27084,12 +27091,17 @@ async function run() {
     const lockedUrl = `https://previewlocker.dev/r.php?token=${token}`;
     core.setOutput("url", lockedUrl);
     let securityReportText = "";
+    let warningLabels = [];
     if (scanPreview) {
       const securityReport = await runPreviewSecurityChecks(previewUrl, scanTimeoutMs);
       securityReportText = formatSecurityReport(securityReport);
+      warningLabels = securityReportWarnings(securityReport);
       core.info(securityReportText);
     }
     if (!commentOnPr) {
+      if (scanPreview && failOnRisk && warningLabels.length > 0) {
+        throw new Error(`PreviewLocker found preview security warnings: ${warningLabels.join(", ")}`);
+      }
       return;
     }
     const githubToken = core.getInput("github_token");
@@ -27110,6 +27122,9 @@ async function run() {
       scanPreview ? securityReportText : ""
     );
     await upsertPreviewLockerComment(octokit, owner, repo, issue_number, commentBody);
+    if (scanPreview && failOnRisk && warningLabels.length > 0) {
+      throw new Error(`PreviewLocker found preview security warnings: ${warningLabels.join(", ")}`);
+    }
   } catch (error) {
     core.setFailed(error.message);
   }
