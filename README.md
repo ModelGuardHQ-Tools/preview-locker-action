@@ -8,6 +8,15 @@ Create locked, expiring sharing links for pull request and staging preview envir
 
 Preview Locker helps teams share staging and preview URLs with less accidental exposure by issuing time-limited locked links from a standard GitHub Actions step.
 
+## What it looks like in a pull request
+
+PreviewLocker can post a pull request comment with the locked preview URL and basic preview security checks:
+
+![PreviewLocker pull request comment demo](docs/previewlocker-pr-comment-demo.png)
+
+See the working demo repository:
+https://github.com/ModelGuardHQ-Tools/previewlocker-demo
+
 ## Why Use It
 
 - Protect preview links before sharing them with reviewers, clients, or stakeholders.
