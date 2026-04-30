@@ -1,6 +1,6 @@
 ---
 name: 'PreviewLocker'
-description: 'Create expiring locked links for CI/CD previews'
+description: 'Lock, scan, and report on CI/CD preview URLs'
 author: 'PreviewLocker'
 branding:
   icon: 'lock'
