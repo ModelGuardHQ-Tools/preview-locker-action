@@ -107,6 +107,7 @@ jobs:
           expires_in: 3600
           comment_on_pr: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+```
 
 ## Preview Security Checks
 
