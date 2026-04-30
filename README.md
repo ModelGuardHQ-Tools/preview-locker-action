@@ -187,9 +187,9 @@ This improves how you share preview environments, but it does not automatically 
 
 ## Roadmap
 
-- Preview security checks
-- Fail-on-risk policy
-- Rich PR security reports
+- Richer PR security reports with grouped risk levels
+- Configurable policy thresholds
+- More preview platform examples for Vercel, Netlify, GitHub Pages, and Cloudflare Pages
 
 ## License
 
